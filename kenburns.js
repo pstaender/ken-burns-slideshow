@@ -5,6 +5,10 @@ const audioMusic = document.getElementById("audio-music");
 const slideDuration = document.getElementById("slide-duration");
 const showFilenames = document.getElementById("show-filenames");
 
+const autoplayMode = document
+  .querySelector("body")
+  .classList.contains("autoplay");
+
 let slideDurationBufferInSecs = 5;
 let slideDurationInSecs = window
   .getComputedStyle(document.documentElement)
@@ -75,9 +79,59 @@ function showPreviousSlide() {
   showNextOrPreviousSlide("previous");
 }
 
-function initSlideshow(files) {
-  if (!files) {
-    files = imageInput.files;
+function imagesLoadedCount() {
+  let all = imageWrap.querySelectorAll("img").length;
+  let loaded = imageWrap.querySelectorAll("img.loaded").length;
+  let perc = Math.round(100 / all) * loaded;
+  if (perc === 0) {
+    // show a minimal progress
+    document.querySelector("#progress-bar .progress").style.width = "5%";
+  } else {
+    document.querySelector("#progress-bar .progress").style.width = `${perc}%`;
+  }
+  return {
+    all,
+    notLoaded: imageWrap.querySelectorAll("img:not(.loaded)").length,
+    loaded,
+    perc,
+  };
+}
+
+function initSlideshow(autoplayMode = false) {
+  let files = imageInput.files;
+
+  let applyImageOrientationAndAnimationOnLoad = (event) => {
+    let img = event.target;
+    let orientation = null;
+    if (img.naturalWidth > img.naturalHeight) {
+      orientation = "landscape";
+    } else if (img.naturalWidth < img.naturalHeight) {
+      orientation = "portrait";
+    } else {
+      orientation = "box";
+    }
+    img.classList.add("loaded");
+    img.classList.add(orientation);
+    setCSSVariablesOnImage(
+      img,
+      possibleHorizontalPositions[
+        Math.floor(Math.random() * possibleHorizontalPositions.length)
+      ],
+      possibleVerticalPositions[
+        Math.floor(Math.random() * possibleVerticalPositions.length)
+      ]
+    );
+  };
+
+  if (autoplayMode) {
+    if (!imageWrap.querySelector("img")) {
+      alert("Please add images to #image-wrap container first");
+      return false;
+    }
+    imageWrap.querySelectorAll("img").forEach((img) => {
+      img.addEventListener("load", applyImageOrientationAndAnimationOnLoad);
+    });
+    return true;
   }
   if (!files || !files.length) {
     alert("Please add images first");
@@ -88,28 +142,9 @@ function initSlideshow(files) {
     let img = document.createElement("IMG");
     img.src = URL.createObjectURL(file);
     img.dataset.fileName = file.name;
-    img.addEventListener("load", () => {
-      let orientation = null;
-      if (img.naturalWidth > img.naturalHeight) {
-        orientation = "landscape";
-      } else if (img.naturalWidth < img.naturalHeight) {
-        orientation = "portrait";
-      } else {
-        orientation = "box";
-      }
-      img.classList.add(orientation);
-    });
+    img.addEventListener("load", applyImageOrientationAndAnimationOnLoad);
 
     imageWrap.appendChild(img);
-    setCSSVariablesOnImage(
-      img,
-      possibleHorizontalPositions[
-        Math.floor(Math.random() * possibleHorizontalPositions.length)
-      ],
-      possibleVerticalPositions[
-        Math.floor(Math.random() * possibleVerticalPositions.length)
-      ]
-    );
   }
   return true;
 }
@@ -260,3 +295,39 @@ let applySettings = () => {
 };
 
 applySettings();
+
+if (autoplayMode) {
+  initSlideshow(true);
+  document.querySelector("body").classList.remove("show-config");
+  let audioMusicLoaded = audioMusic.src ? false : true;
+  if (!audioMusicLoaded) {
+    audioMusic.addEventListener("canplaythrough", () => {
+      audioMusicLoaded = true;
+    });
+  }
+  let checkProgressIntervalID = setInterval(() => {
+    let { perc, loaded } = imagesLoadedCount();
+    let isReady = false;
+    let start = () => (isReady ? startSlideshow() : false);
+    if (loaded > 2 && audioMusicLoaded) {
+      // start slideshow if more than 2 images are loaded
+      isReady = true;
+    }
+
+    if (perc >= 99 && audioMusicLoaded) {
+      perc = 100;
+      clearInterval(checkProgressIntervalID);
+      document.querySelector("#progress-bar").classList.add("invisible");
+      isReady = true;
+    }
+    if (isReady) {
+      //src="./test.mp3"
+      if (!audioMusic.src) {
+        start();
+        return;
+      }
+      document.querySelector("body").classList.add("ready");
+    }
+    document.addEventListener("click", start, { once: true });
+  }, 500);
+}

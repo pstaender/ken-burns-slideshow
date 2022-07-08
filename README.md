@@ -11,6 +11,32 @@ Strating from this nice example - https://codepen.io/SaijoGeorge/pen/LxeGgY - en
     space - Start/Stop slideshow (animation continues)
     b - Black-And-White filter
 
+## Create a site with autoplaying slideshow
+
+1. Add class `autoplay` to body:
+
+```html
+<body class="autoplay">
+```
+
+2. Insert images in `#image-wrap`:
+
+```html
+<div id="image-wrap">
+    <img src="1.jpg">
+    <img src="2.jpg">
+    …
+</div>
+```
+
+3. Optional: Add audio file:
+
+```html
+<audio id="audio-music" controls loop src="music.mp3"></audio>
+```
+
+See the example `index.php` file for server side usage.
+
 ## License
 
 MIT

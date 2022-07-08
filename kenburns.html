@@ -9,11 +9,22 @@
     <script src="kenburns.js" defer></script>
   </head>
   <body class="show-config">
-    <div id="black-white-filter"></div>
+    <div
+      id="black-white-filter"
+      style="backdrop-filter: brightness(1.02) contrast(1.05) grayscale(1)"
+    ></div>
     <div id="image-wrap"></div>
     <div id="current-filename"></div>
     <div id="slideshow-config">
       <div class="form">
+        <h1>Slideshow <small>v1.0</small></h1>
+        <h2>
+          <a
+            href="https://github.com/pstaender/ken-burns-slideshow"
+            target="_blank"
+            >© https://github.com/pstaender/ken-burns-slideshow</a
+          >
+        </h2>
         <label for="background-color">Background color:</label>
         <input
           id="background-color"
@@ -30,13 +41,18 @@
         <input type="range" id="slide-duration" min="1" max="30" />
         <div id="slide-duration-value"></div>
         <label for="music-file">Music file:</label>
-        <input id="music-file" type="file" accept="audio/*"/>
-        <audio id="audio-music" controls loop style="display: block; padding-top: 1rem;"></audio>
+        <input id="music-file" type="file" accept="audio/*" />
+        <audio id="audio-music" controls loop></audio>
         <label for="image-files">Image file(s):</label>
         <input id="image-files" type="file" accept="image/*" multiple />
-        
         <button id="start-slideshow">Start</button>
-      </form>
+      </div>
+    </div>
+    <div id="autplay-hint">
+      <p></p>
+    </div>
+    <div id="progress-bar">
+      <div class="progress"></div>
     </div>
     <script></script>
   </body>
