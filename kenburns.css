@@ -4,6 +4,7 @@
   --fade-duration: 1s;
   --vertical-position: bottom;
   --horizontal-position: right;
+  --color-background: #222;
 }
 *:focus {
   outline: 0 !important;
@@ -14,6 +15,9 @@ body {
   min-height: 100%;
   height: 100%;
   margin: 0;
+}
+body {
+  background-color: var(--color-background);
 }
 #image-wrap {
   width: 100%;
@@ -46,9 +50,9 @@ body {
 #image-wrap img.visible,
 #image-wrap img.fade-out {
   opacity: 1;
-  animation: move var(--slide-duration) ease infinite;
-  -webkit-animation: move var(--slide-duration) ease infinite;
-  -moz-animation: move var(--slide-duration) ease infinite;
+  animation: kenburnsmove var(--slide-duration) linear infinite;
+  -webkit-animation: kenburnsmove var(--slide-duration) linear infinite;
+  -moz-animation: kenburnsmove var(--slide-duration) linear infinite;
 }
 #image-wrap img.fade-out {
   opacity: 0;
@@ -57,7 +61,7 @@ body {
   z-index: 999;
 }
 
-@-webkit-keyframes move {
+@-webkit-keyframes kenburnsmove {
   0% {
     -webkit-transform-origin: var(--vertical-position)
       var(--horizontal-position);
