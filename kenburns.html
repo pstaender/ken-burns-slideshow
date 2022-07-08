@@ -8,10 +8,36 @@
     <link rel="stylesheet" href="kenburns.css" />
     <script src="kenburns.js" defer></script>
   </head>
-  <body>
+  <body class="show-config">
+    <div id="black-white-filter"></div>
     <div id="image-wrap"></div>
-    <form>
-      <input id="image-input" type="file" accept="image/*" multiple />
-    </form>
+    <div id="current-filename"></div>
+    <div id="slideshow-config">
+      <div class="form">
+        <label for="background-color">Background color:</label>
+        <input
+          id="background-color"
+          type="color"
+          oninput="document.documentElement.style.setProperty('--color-background', this.value); localStorage.setItem('backgroundColor', this.value)"
+        />
+        <label for="show-filenames">Show filenames:</label>
+        <input
+          id="show-filenames"
+          type="checkbox"
+          onchange="document.querySelector('body').classList[(this.checked ? 'add' : 'remove')]('show-filenames'); localStorage.setItem('showFilenames', this.checked ? 'true' : '')"
+        />
+        <label for="slide-duration">Slide duration:</label>
+        <input type="range" id="slide-duration" min="1" max="30" />
+        <div id="slide-duration-value"></div>
+        <label for="music-file">Music file:</label>
+        <input id="music-file" type="file" accept="audio/*"/>
+        <audio id="audio-music" controls loop style="display: block; padding-top: 1rem;"></audio>
+        <label for="image-files">Image file(s):</label>
+        <input id="image-files" type="file" accept="image/*" multiple />
+        
+        <button id="start-slideshow">Start</button>
+      </form>
+    </div>
+    <script></script>
   </body>
 </html>

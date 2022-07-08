@@ -1,10 +1,10 @@
 :root {
-  --slide-duration: 20s;
+  --slide-duration: 15s;
   --scale-max: 1.4;
   --fade-duration: 1s;
   --vertical-position: bottom;
   --horizontal-position: right;
-  --color-background: #222;
+  --color-background: #222222;
 }
 *:focus {
   outline: 0 !important;
@@ -15,6 +15,10 @@ body {
   min-height: 100%;
   height: 100%;
   margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  line-height: 1.5;
 }
 body {
   background-color: var(--color-background);
@@ -78,13 +82,77 @@ body {
   }
 }
 
-#image-input {
-  position: absolute;
-  z-index: 100;
+#slideshow-config {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  text-indent: -110vw;
+  z-index: 9999;
+  display: none;
+  place-content: center;
+}
+.form {
+  display: block;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 3px;
+  color: #000;
+  backdrop-filter: blur(5px);
+  box-shadow: 0px 0px 30px rgb(0 0 0 / 30%);
+}
+label {
+  display: block;
+  font-weight: bold;
+  padding-top: 2rem;
+  padding-bottom: 0.25rem;
+}
+.form button {
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 1);
+  margin: 1rem auto;
+  margin-top: 2rem;
+  border-radius: 3px;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  font-size: 1rem;
+}
+#current-filename {
+  position: fixed;
+  bottom: 3rem;
+  left: 0;
+  width: 100%;
   z-index: 99999;
+  height: 1rem;
+  font-size: 3rem;
+  line-height: 1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0px 0px 17px rgb(0 0 0 / 50%);
+  display: none;
+}
+body.show-filenames #current-filename {
+  display: block;
+}
+body.slideshow-running #start-slideshow {
+  display: none;
+}
+body.show-config #slideshow-config {
+  display: grid;
+}
+#black-white-filter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  backdrop-filter: brightness(1.02) contrast(1.05) grayscale(1);
+  display: none;
+}
+body.with-black-and-white-filter #black-white-filter {
+  display: block;
 }
